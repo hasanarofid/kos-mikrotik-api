@@ -27,112 +27,81 @@
   <!-- Google Font: Source Sans Pro -->
   <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
 </head>
-<body class="hold-transition sidebar-mini layout-fixed">
-<div class="wrapper">
+<body>
+  <div class="bs-canvas-overlay bg-default position-fixed w-100 h-100"></div>
+  <nav class="navbar navbar-expand-xl navbar-dark bg-info">
+    <a class="navbar-brand" href="#">Kos 95  <img src="{{ asset('kos95.png') }}" alt="logo" width="50" class="shadow-light rounded-circle"></a>
+    <button class="navbar-toggler ml-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+   
 
-  <!-- Navbar -->
-  <nav class="main-header navbar navbar-expand navbar-light">
-    <ul class="navbar-nav">
-      <li class="nav-item">
-        <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
-      </li>
-    </ul>
-    <!-- Right navbar links -->
-    <ul class="navbar-nav ml-auto">
-      <!-- Notifications Dropdown Menu -->
-      <li class="nav-item dropdown">
-        <a class="nav-link" href="{{ '/logout' }}" onclick="event.preventDefault(); document.getElementById('submit-form').submit()">
-            <i class="fas fa-sign-out-alt" style="color: blue"></i>
-        </a>
-      </li>
-      <form id="submit-form" action="{{ '/logout' }}" method="POST" class="hidden">
-        @csrf
-      </form>
-      {{-- <li class="nav-item">
-        <a class="nav-link" data-widget="control-sidebar" data-slide="true" href="#" role="button">
-          <i class="fas fa-th-large"></i>
-        </a>
-      </li> --}}
-    </ul>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item mt-2">
+          <a href="{{ '/home' }}" class="nav-link">
+            <p class="nav-icon fas fa-tachometer-alt">  Dashboard</p>
+            
+          </a>
+        </li>
+        <li class="nav-item mt-2">
+          <a href="{{ '/voucher' }}" class="nav-link ">
+            <p class="fa fa-ticket"> 
+              Voucher
+            </p>
+            
+          </a>
+        </li>
+        <li class="nav-item mt-2">
+          <a href="{{ '/log' }}" class="nav-link ">
+            <p class="fa fa-sticky-note">
+              Log
+            </p>
+          </a>
+        </li>
+
+        <li class="nav-item mt-2">
+          <a href="{{ '/queue' }}" class="nav-link ">
+            <p class="fa fa-bars">
+              Queue
+            </p>
+          </a>
+        </li>
+
+        <li class="nav-item mt-2">
+          <a href="{{ '/rebbot' }}" class="nav-link ">
+            <p class="fa fa-filter">
+              Filter
+            </p>
+          </a>
+        </li>
+
+        <li class="nav-item mt-2">
+          <a href="{{ '/rebbot' }}" class="nav-link ">
+            <p class="fa fa-power-off">
+              Reboot
+            </p>
+          </a>
+        </li>
+
+<li class="nav-item dropdown mt-2">
+          <a class="nav-link" href="{{ '/logout' }}" onclick="event.preventDefault(); document.getElementById('submit-form').submit()">
+              <i class="fas fa-sign-out-alt" style="color: blue"></i>
+          </a>
+        </li>
+        <form id="submit-form" action="{{ '/logout' }}" method="POST" class="hidden">
+          @csrf
+        </form>
+
+      </ul>
+      
+    </div>    
   </nav>
-  <!-- /.navbar -->
-
-  <!-- Main Sidebar Container -->
-  <aside class="main-sidebar sidebar-light-primary elevation-4">
-    <!-- Brand Logo -->
-    <a href="{{ '/home' }}" class="brand-link text-sm">
-      <img src="{{ asset('kos95.png') }}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
-           style="opacity: .8">
-      <span class="brand-text font-weight-light">KOS 95</span>
-    </a>
-
-    <!-- Sidebar -->
-    <div class="sidebar">
- 
-     <nav class="mt-2">
-        <ul class="nav nav-pills nav-sidebar flex-column" data-accordion="false">
-          <!-- Add icons to the links using the .nav-icon class
-               with font-awesome or any other icon font library -->
-          <li class="nav-item">
-            <a href="{{ '/home' }}" class="nav-link active">
-              <i class="nav-icon fas fa-tachometer-alt"></i>
-              <p>
-                Dashboard
-              </p>
-            </a>
-          </li>
-       
-
-          <li class="nav-item mt-2">
-            <a href="{{ '/voucher' }}" class="nav-link ">
-              <i class="fa fa-ticket"></i>
-              <p>
-                Voucher
-              </p>
-            </a>
-          </li>
-
-          <li class="nav-item mt-2">
-            <a href="{{ '/log' }}" class="nav-link ">
-              <i class="fa fa-sticky-note"></i>
-              <p>
-                Log
-              </p>
-            </a>
-          </li>
-
-          <li class="nav-item mt-2">
-            <a href="{{ '/queue' }}" class="nav-link ">
-              <i class="fa fa-bars"></i>
-              <p>
-                Queue
-              </p>
-            </a>
-          </li>
-
-          <li class="nav-item mt-2">
-            <a href="{{ '/rebbot' }}" class="nav-link ">
-              <i class="fa fa-filter"></i>
-              <p>
-                Filter
-              </p>
-            </a>
-          </li>
-
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              Setting
-            </a>
-            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <a class="dropdown-item" href="{{ '/rebbot' }}">Reboot</a>
-            </div>
-          </li>
-        </ul>
-      </nav>
-      <!-- /.sidebar-menu -->
-    </div>
-    <!-- /.sidebar -->
-  </aside>
+  <style>
+    .container{
+      max-width: 1500px;
+    }
+  </style>
   @yield('content')
   <footer class="main-footer text-sm">
     <strong>Copyright &copy; 2023 <a href="#">Monitoring ISP </a>.</strong>
@@ -142,12 +111,8 @@
     </div>
   </footer>
 
-  <!-- Control Sidebar -->
-  <aside class="control-sidebar control-sidebar-dark">
-    <!-- Control sidebar content goes here -->
-  </aside>
-  <!-- /.control-sidebar -->
-</div>
+  </body>
+
 <!-- ./wrapper -->
 
 <!-- jQuery -->
