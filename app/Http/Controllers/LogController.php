@@ -16,10 +16,14 @@ class LogController extends Controller
     }
 
     public function log(){
+
+$host ="103.158.155.7";
+$user = "wahyu";
+$pass = "wahyu2000";
         $client = new Client([
-            'host' => env('host'),
-            'user' => env('user'),
-            'pass' => env('pass')
+            'host' => $host,
+            'user' =>  $user,
+            'pass' => $pass
         ]);
         
          $data = $client->query('/log/print')->read();

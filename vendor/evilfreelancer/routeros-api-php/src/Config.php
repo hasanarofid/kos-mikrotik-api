@@ -45,7 +45,7 @@ class Config implements ConfigInterface
      */
     public const SSL_OPTIONS = [
         /*
-         * Sets the list of available ciphers. By default RouterOS available via 'ADH:ALL'.
+         * Sets the list of available ciphers. By default, RouterOS available via 'ADH:ALL'.
          *
          * @example 'ADH:ALL'             // Alias to ADH:ALL@SECLEVEL=1
          *          'ADH:ALL@SECLEVEL=0'  // Everything is permitted. This retains compatibility with previous versions of OpenSSL.
@@ -65,14 +65,35 @@ class Config implements ConfigInterface
         // Require verification of peer name.
         'verify_peer_name'  => false,
 
-        // Allow self-signed certificates. Requires verify_peer.
+        // Allow self-signed certificates. Requires verify_peer=true.
         'allow_self_signed' => false,
     ];
 
     /**
-     * Max timeout for answer from router
+     * Max timeout for connecting to router (in seconds)
      */
     public const TIMEOUT = 10;
+
+    /**
+     * Max read timeout from router (in seconds)
+     */
+    public const SOCKET_TIMEOUT = 30;
+
+    /**
+     * List of options for socket context
+     *
+     * @see https://www.php.net/manual/en/context.socket.php
+     */
+    public const SOCKET_OPTIONS = [
+        // Examples:
+        // 'bindto' => '192.168.0.100:0',    // connect to the internet using the '192.168.0.100' IP
+        // 'bindto' => '192.168.0.100:7000', // connect to the internet using the '192.168.0.100' IP and port '7000'
+        // 'bindto' => '[2001:db8::1]:7000', // connect to the internet using the '2001:db8::1' IPv6 address and port '7000'
+        // 'bindto' => '0:7000',             // connect to the internet using port '7000'
+        // 'bindto' => '0:0',                // Forcing IPv4
+        // 'bindto' => '[::]:0',             // Forcing IPv6
+        // 'tcp_nodelay' => true,            // Setting this option to true will set SOL_TCP,NO_DELAY=1 appropriately, thus disabling the TCP Nagle algorithm.
+    ];
 
     /**
      * Count of reconnect attempts
@@ -85,25 +106,42 @@ class Config implements ConfigInterface
     public const ATTEMPTS_DELAY = 1;
 
     /**
-     * Delay between attempts in seconds
+     * Number of SSH port for exporting configuration
      */
     public const SSH_PORT = 22;
+
+    /**
+     * By default stream on blocking mode
+     */
+    public const SOCKET_BLOCKING = true;
+
+    /**
+     * Max read timeout from router via SSH (in seconds)
+     */
+    public const SSH_TIMEOUT = 30;
+
+    public const SSH_PRIVATE_KEY = '~/.ssh/id_rsa';
 
     /**
      * List of allowed parameters of config
      */
     public const ALLOWED = [
-        'host'        => 'string',  // Address of Mikrotik RouterOS
-        'user'        => 'string',  // Username
-        'pass'        => 'string',  // Password
-        'port'        => 'integer', // RouterOS API port number for access (if not set use default or default with SSL if SSL enabled)
-        'ssl'         => 'boolean', // Enable ssl support (if port is not set this parameter must change default port to ssl port)
-        'ssl_options' => 'array', // Enable ssl support (if port is not set this parameter must change default port to ssl port)
-        'legacy'      => 'boolean', // Support of legacy login scheme (true - pre 6.43, false - post 6.43)
-        'timeout'     => 'integer', // Max timeout for answer from RouterOS
-        'attempts'    => 'integer', // Count of attempts to establish TCP session
-        'delay'       => 'integer', // Delay between attempts in seconds
-        'ssh_port'    => 'integer', // Number of SSH port
+        'host'            => 'string',  // Address of Mikrotik RouterOS
+        'user'            => 'string',  // Username
+        'pass'            => 'string',  // Password
+        'port'            => 'integer', // RouterOS API port number for access (if not set use default or default with SSL if SSL enabled)
+        'ssl'             => 'boolean', // Enable ssl support (if port is not set this parameter must change default port to ssl port)
+        'ssl_options'     => 'array',   // List of SSL options, eg.
+        'legacy'          => 'boolean', // Support of legacy login scheme (true - pre 6.43, false - post 6.43)
+        'timeout'         => 'integer', // Max timeout for instantiating connection with RouterOS
+        'socket_timeout'  => 'integer', // Max timeout for read from RouterOS
+        'socket_blocking' => 'boolean', // Set blocking mode on a socket stream
+        'socket_options'  => 'array',   // List of socket context options
+        'attempts'        => 'integer', // Count of attempts to establish TCP session
+        'delay'           => 'integer', // Delay between attempts in seconds
+        'ssh_port'        => 'integer', // Number of SSH port
+        'ssh_timeout'     => 'integer', // Max timeout for read from RouterOS via SSH proto (for "/export" command)
+        'ssh_private_key' => 'string',  // Max timeout for read from RouterOS via SSH proto (for "/export" command)
     ];
 
     /**
@@ -112,13 +150,18 @@ class Config implements ConfigInterface
      * @var array
      */
     private $_parameters = [
-        'legacy'      => self::LEGACY,
-        'ssl'         => self::SSL,
-        'ssl_options' => self::SSL_OPTIONS,
-        'timeout'     => self::TIMEOUT,
-        'attempts'    => self::ATTEMPTS,
-        'delay'       => self::ATTEMPTS_DELAY,
-        'ssh_port'    => self::SSH_PORT,
+        'legacy'          => self::LEGACY,
+        'ssl'             => self::SSL,
+        'ssl_options'     => self::SSL_OPTIONS,
+        'timeout'         => self::TIMEOUT,
+        'socket_timeout'  => self::SOCKET_TIMEOUT,
+        'socket_blocking' => self::SOCKET_BLOCKING,
+        'socket_options'  => self::SOCKET_OPTIONS,
+        'attempts'        => self::ATTEMPTS,
+        'delay'           => self::ATTEMPTS_DELAY,
+        'ssh_port'        => self::SSH_PORT,
+        'ssh_timeout'     => self::SSH_TIMEOUT,
+        'ssh_private_key' => self::SSH_PRIVATE_KEY,
     ];
 
     /**
@@ -164,9 +207,9 @@ class Config implements ConfigInterface
      *
      * @param string $parameter
      *
-     * @return bool|int
+     * @return null|int
      */
-    private function getPort(string $parameter)
+    private function getPort(string $parameter): ?int
     {
         // If client need port number and port is not set
         if ('port' === $parameter && (!isset($this->_parameters['port']) || null === $this->_parameters['port'])) {
@@ -184,15 +227,16 @@ class Config implements ConfigInterface
      *
      * @throws \RouterOS\Exceptions\ConfigException when parameter is not allowed
      */
-    public function delete(string $name): ConfigInterface
+    public function delete(string $parameter): ConfigInterface
     {
         // Check of key in array
-        if (ArrayHelper::checkIfKeyNotExist($name, self::ALLOWED)) {
-            throw new ConfigException("Requested parameter '$name' not found in list [" . implode(',', array_keys(self::ALLOWED)) . ']');
+        if (ArrayHelper::checkIfKeyNotExist($parameter, self::ALLOWED)) {
+            $list = implode(',', array_keys(self::ALLOWED));
+            throw new ConfigException("Requested parameter '$parameter' not found in list [$list]");
         }
 
         // Save value to array
-        unset($this->_parameters[$name]);
+        unset($this->_parameters[$parameter]);
 
         return $this;
     }
@@ -202,14 +246,15 @@ class Config implements ConfigInterface
      *
      * @throws \RouterOS\Exceptions\ConfigException when parameter is not allowed
      */
-    public function get(string $name)
+    public function get(string $parameter)
     {
         // Check of key in array
-        if (ArrayHelper::checkIfKeyNotExist($name, self::ALLOWED)) {
-            throw new ConfigException("Requested parameter '$name' not found in list [" . implode(',', array_keys(self::ALLOWED)) . ']');
+        if (ArrayHelper::checkIfKeyNotExist($parameter, self::ALLOWED)) {
+            $list = implode(',', array_keys(self::ALLOWED));
+            throw new ConfigException("Requested parameter '$parameter' not found in list [$list]");
         }
 
-        return $this->getPort($name) ?? $this->_parameters[$name];
+        return $this->getPort($parameter) ?? $this->_parameters[$parameter];
     }
 
     /**

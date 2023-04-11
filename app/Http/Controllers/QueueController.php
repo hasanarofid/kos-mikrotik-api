@@ -10,12 +10,15 @@ use \RouterOS\Query;
 class QueueController extends Controller
 {
     public function index() {
+     
+$host ="103.158.155.7";
+$user = "wahyu";
+$pass = "wahyu2000";
         $client = new Client([
-            'host' => env('host'),
-            'user' => env('user'),
-            'pass' => env('pass')
+            'host' => $host,
+            'user' =>  $user,
+            'pass' => $pass
         ]);
-        
         $data = $client->query('/queue/simple/print')->read();
     //    dd($data);
         // $user = collect($data)->except(['0'])->toArray(); 
@@ -26,10 +29,14 @@ class QueueController extends Controller
     }
 
     public function add() {
+   
+$host ="103.158.155.7";
+$user = "wahyu";
+$pass = "wahyu2000";
         $client = new Client([
-            'host' => env('host'),
-            'user' => env('user'),
-            'pass' => env('pass')
+            'host' => $host,
+            'user' =>  $user,
+            'pass' => $pass
         ]);
         $profile = $client->query('/queue/simple/add')->read();
         // dd($profile);
@@ -37,11 +44,15 @@ class QueueController extends Controller
     }
 
     public function store(Request $request) {
+    
+$host ="103.158.155.7";
+$user = "wahyu";
+$pass = "wahyu2000";
         $client = new Client([
-            'host' => '36.88.151.9',
-            'user' => 'website',
-            'pass' => 'password'
-                ]);
+            'host' => $host,
+            'user' =>  $user,
+            'pass' => $pass
+        ]);
 
         $client->query([
         '/queue/simple/add',  
@@ -54,10 +65,14 @@ class QueueController extends Controller
     }
 
     public function edit($id){
+     
+$host ="103.158.155.7";
+$user = "wahyu";
+$pass = "wahyu2000";
         $client = new Client([
-            'host' => env('host'),
-            'user' => env('user'),
-            'pass' => env('pass')
+            'host' => $host,
+            'user' =>  $user,
+            'pass' => $pass
         ]);
         $query =
         (new Query('/queue/simple/print'))
@@ -67,11 +82,15 @@ class QueueController extends Controller
     }
 
     public function update(Request $request) {
+      
+$host ="103.158.155.7";
+$user = "wahyu";
+$pass = "wahyu2000";
         $client = new Client([
-            'host' => env('host'),
-            'user' => env('user'),
-            'pass' => env('pass')
-                ]);
+            'host' => $host,
+            'user' =>  $user,
+            'pass' => $pass
+        ]);
                 $query = (new Query('/queue/simple/set'))
                 ->equal('.id', $request->id)
                 ->equal('name', $request->name)
@@ -89,10 +108,14 @@ class QueueController extends Controller
 
 
     public function destroy($id){
+    
+$host ="103.158.155.7";
+$user = "wahyu";
+$pass = "wahyu2000";
         $client = new Client([
-            'host' => env('host'),
-            'user' => env('user'),
-            'pass' => env('pass')
+            'host' => $host,
+            'user' =>  $user,
+            'pass' => $pass
         ]);
         $client->query(['/queue/simple/remove', '=.id='.$id])->read();
 
@@ -100,10 +123,14 @@ class QueueController extends Controller
     }
 
     public function enable($id) {
+      
+$host ="103.158.155.7";
+$user = "wahyu";
+$pass = "wahyu2000";
         $client = new Client([
-            'host' => env('host'),
-            'user' => env('user'),
-            'pass' => env('pass')
+            'host' => $host,
+            'user' =>  $user,
+            'pass' => $pass
         ]);
         $client->query(['/queue/simple/enable', '=.id='.$id])->read();
      
@@ -117,10 +144,14 @@ class QueueController extends Controller
      * 
      */
     public function disable($id) {
+       
+$host ="103.158.155.7";
+$user = "wahyu";
+$pass = "wahyu2000";
         $client = new Client([
-            'host' => env('host'),
-            'user' => env('user'),
-            'pass' => env('pass')
+            'host' => $host,
+            'user' =>  $user,
+            'pass' => $pass
         ]);
         $client->query(['/queue/simple/disable', '=.id='.$id])->read();
      

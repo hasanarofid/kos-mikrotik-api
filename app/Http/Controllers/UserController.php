@@ -12,11 +12,14 @@ class UserController extends Controller
 
 
     public function index() {
-        $client = new Client([
-            'host' => env('host'),
-            'user' => env('user'),
-            'pass' => env('pass')
-        ]);
+        $host ="103.158.155.7";
+        $user = "wahyu";
+        $pass = "wahyu2000";
+                $client = new Client([
+                    'host' => $host,
+                    'user' =>  $user,
+                    'pass' => $pass
+                ]);
         
         $data = $client->query('/ip/hotspot/user/print')->read();
         $user = collect($data)->except(['0'])->toArray(); 
@@ -27,21 +30,27 @@ class UserController extends Controller
     }
 
     public function add() {
-        $client = new Client([
-            'host' => env('host'),
-            'user' => env('user'),
-            'pass' => env('pass')
-        ]);
+        $host ="103.158.155.7";
+        $user = "wahyu";
+        $pass = "wahyu2000";
+                $client = new Client([
+                    'host' => $host,
+                    'user' =>  $user,
+                    'pass' => $pass
+                ]);
         $profile = $client->query('/ip/hotspot/user/profile/print')->read();
         // dd($profle);
         return view('addUser', compact('profile'));
     }
 
     public function store(Request $request) {
-        $client = new Client([
-            'host' => env('host'),
-            'user' => env('user'),
-            'pass' => env('pass')
+        $host ="103.158.155.7";
+        $user = "wahyu";
+        $pass = "wahyu2000";
+                $client = new Client([
+                    'host' => $host,
+                    'user' =>  $user,
+                    'pass' => $pass
                 ]);
 // dd($request->$password);die;
         $client->query([
@@ -57,11 +66,14 @@ class UserController extends Controller
     }
 
     public function quick() {
-        $client = new Client([
-            'host' => env('host'),
-            'user' => env('user'),
-            'pass' => env('pass')
-        ]);
+        $host ="103.158.155.7";
+        $user = "wahyu";
+        $pass = "wahyu2000";
+                $client = new Client([
+                    'host' => $host,
+                    'user' =>  $user,
+                    'pass' => $pass
+                ]);
 
         for($i = 0; $i <= 200; $i++) {
             $password = Str::random(5);
@@ -73,22 +85,28 @@ class UserController extends Controller
     }
 
     public function destroy($id){
-        $client = new Client([
-            'host' => env('host'),
-            'user' => env('user'),
-            'pass' => env('pass')
-        ]);
+        $host ="103.158.155.7";
+        $user = "wahyu";
+        $pass = "wahyu2000";
+                $client = new Client([
+                    'host' => $host,
+                    'user' =>  $user,
+                    'pass' => $pass
+                ]);
         $client->query(['/ip/hotspot/user/remove', '=.id='.$id])->read();
 
         return redirect('/user');
     }
 
     public function enable($id) {
-        $client = new Client([
-            'host' => env('host'),
-            'user' => env('user'),
-            'pass' => env('pass')
-        ]);
+        $host ="103.158.155.7";
+        $user = "wahyu";
+        $pass = "wahyu2000";
+                $client = new Client([
+                    'host' => $host,
+                    'user' =>  $user,
+                    'pass' => $pass
+                ]);
         $client->query(['/ip/hotspot/user/enable', '=.id='.$id])->read();
      
         return redirect('/user');
@@ -101,11 +119,14 @@ class UserController extends Controller
      * 
      */
     public function disable($id) {
-        $client = new Client([
-            'host' => env('host'),
-            'user' => env('user'),
-            'pass' => env('pass')
-        ]);
+        $host ="103.158.155.7";
+        $user = "wahyu";
+        $pass = "wahyu2000";
+                $client = new Client([
+                    'host' => $host,
+                    'user' =>  $user,
+                    'pass' => $pass
+                ]);
         $client->query(['/ip/hotspot/user/disable', '=.id='.$id])->read();
      
         return redirect('/user');
@@ -113,13 +134,16 @@ class UserController extends Controller
     }
 
     public function useraktif() {
-        $client = new Client([
-            'host' => env('host'),
-            'user' => env('user'),
-            'pass' => env('pass')
-        ]);
-        $user = $client->query('/ppp/secret/print')->read();
-        $aktif = $client->query('/ppp/active/print')->read();
+        $host ="103.158.155.7";
+        $user = "wahyu";
+        $pass = "wahyu2000";
+                $client = new Client([
+                    'host' => $host,
+                    'user' =>  $user,
+                    'pass' => $pass
+                ]);
+                $user = $client->query('/ip/hotspot/user/print')->read();
+        $aktif = $client->query('/ip/hotspot/active/print')->read();
        
         return view('user.aktif', compact('user', 'aktif'));
     
@@ -127,13 +151,16 @@ class UserController extends Controller
     }
 
     public function userall() {
-        $client = new Client([
-            'host' => env('host'),
-            'user' => env('user'),
-            'pass' => env('pass')
-        ]);
-        $user = $client->query('/ppp/secret/print')->read();
-        $aktif = $client->query('/ppp/active/print')->read();
+        $host ="103.158.155.7";
+        $user = "wahyu";
+        $pass = "wahyu2000";
+                $client = new Client([
+                    'host' => $host,
+                    'user' =>  $user,
+                    'pass' => $pass
+                ]);
+        $user = $client->query('/ip/hotspot/user/print')->read();
+        $aktif = $client->query('/ip/hotspot/active/print')->read();
        
         return view('user.userall', compact('user', 'aktif'));
     

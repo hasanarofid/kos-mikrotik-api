@@ -3,7 +3,7 @@
 @section('title', 'List User')
 
 @section('content')
-<div class="content-wrapper">
+<div class="container">
     <!-- Content Header (Page header) -->
     <div class="content-header">
       <div class="container-fluid">
@@ -49,16 +49,19 @@
                               </tr>
                             </thead>
                             @foreach ($user as $u)
-                      
+                      @php
+                          // dd($u);
+
+                      @endphp
                             <tbody>
                               <tr>
                                 <td>{{ $loop->index + 1 }}</td>
                                 <td> {{ $u['name'] }}</td>
                                 <td> {{ !empty($u['address']) ? $u['address'] : '-'  }}</td>
-                                <td> {{ $u['caller-id'] }}</td>
+                                <td> {{ !empty($u['mac-address']) ? $u['mac-address'] : '-'  }}</td>
+                                <td> {{ !empty($u['bytes-in']) ? $u['bytes-in'] : '-'  }}</td>
+                                <td> {{ !empty($u['bytes-out']) ? $u['bytes-out'] : '-'  }}</td>
                                 <td> {{ !empty($u['uptime']) ? $u['uptime'] : '-' }}</td>
-                                <td> {{ $u['limit-bytes-in'] }}</td>
-                                <td> {{ $u['limit-bytes-out'] }}</td>
                                 <td>{{ !empty($u['encoding']) ? $u['encoding'] : '-' }}</td>
 
                               </tr>

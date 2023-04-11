@@ -10,11 +10,14 @@ use \RouterOS\Query;
 class TrafficController extends Controller
 {
     public function index() {
-        $client = new Client([
-            'host' => env("host"),
-            'user' =>  env("user"),
-            'pass' => env("pass")
-        ]);
+        $host ="103.158.155.7";
+        $user = "wahyu";
+        $pass = "wahyu2000";
+                $client = new Client([
+                    'host' => $host,
+                    'user' =>  $user,
+                    'pass' => $pass
+                ]);
         
         // $data = $client->query('/interface/monitor-traffic/print')->read();
         // Build monitoring query
@@ -36,11 +39,14 @@ $grafik = $client->query($query)->read();
     }
 
     public function data(Request $request){
-        $client = new Client([
-            'host' => env("host"),
-            'user' =>  env("user"),
-            'pass' => env("pass")
-        ]);
+        $host ="103.158.155.7";
+        $user = "wahyu";
+        $pass = "wahyu2000";
+                $client = new Client([
+                    'host' => $host,
+                    'user' =>  $user,
+                    'pass' => $pass
+                ]);
 
 $interface = $_GET["interface"]; ;
 

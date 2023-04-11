@@ -3,7 +3,7 @@
 @section('title', 'Tambah Queue')
 
 @section('content')
-<div class="content-wrapper">
+<div class="container">
     <!-- Content Header (Page header) -->
     <div class="content-header">
       <div class="container-fluid">

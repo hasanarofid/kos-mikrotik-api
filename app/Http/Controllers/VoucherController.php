@@ -12,11 +12,14 @@ class VoucherController extends Controller
 
 
     public function index() {
-        $client = new Client([
-            'host' => env("host"),
-            'user' =>  env("user"),
-            'pass' => env("pass")
-        ]);
+        $host ="103.158.155.7";
+        $user = "wahyu";
+        $pass = "wahyu2000";
+                $client = new Client([
+                    'host' => $host,
+                    'user' =>  $user,
+                    'pass' => $pass
+                ]);
         
         $data = $client->query('/ip/hotspot/user/print')->read();
         $user = collect($data)->except(['0'])->toArray(); 
@@ -27,22 +30,28 @@ class VoucherController extends Controller
     }
 
     public function add() {
-        $client = new Client([
-            'host' => env("host"),
-            'user' =>  env("user"),
-            'pass' => env("pass")
-        ]);
+        $host ="103.158.155.7";
+        $user = "wahyu";
+        $pass = "wahyu2000";
+                $client = new Client([
+                    'host' => $host,
+                    'user' =>  $user,
+                    'pass' => $pass
+                ]);
         $profile = $client->query('/ppp/secret/add')->read();
         // dd($profile);
         return view('voucher.addUser', compact('profile'));
     }
 
     public function edit($id){
-        $client = new Client([
-            'host' => env("host"),
-            'user' =>  env("user"),
-            'pass' => env("pass")
-        ]);
+        $host ="103.158.155.7";
+        $user = "wahyu";
+        $pass = "wahyu2000";
+                $client = new Client([
+                    'host' => $host,
+                    'user' =>  $user,
+                    'pass' => $pass
+                ]);
         $query =
         (new Query('/ppp/secret/print'))
             ->where('.id', $id);          
@@ -51,10 +60,13 @@ class VoucherController extends Controller
     }
 
     public function update(Request $request) {
-        $client = new Client([
-            'host' => env("host"),
-            'user' =>  env("user"),
-            'pass' => env("pass")
+        $host ="103.158.155.7";
+        $user = "wahyu";
+        $pass = "wahyu2000";
+                $client = new Client([
+                    'host' => $host,
+                    'user' =>  $user,
+                    'pass' => $pass
                 ]);
                 $query = (new Query('/ppp/secret/set'))
                 ->equal('.id', $request->id)
@@ -69,10 +81,15 @@ class VoucherController extends Controller
     }
 
     public function store(Request $request) {
-        $client = new Client([
-            'host' => env("host"),
-            'user' =>  env("user"),
-            'pass' => env("pass")
+
+        dd($request);
+        $host ="103.158.155.7";
+        $user = "wahyu";
+        $pass = "wahyu2000";
+                $client = new Client([
+                    'host' => $host,
+                    'user' =>  $user,
+                    'pass' => $pass
                 ]);
 // dd($request);
         $client->query([
@@ -90,12 +107,14 @@ class VoucherController extends Controller
 
 
     public function quick() {
-        $client = new Client([
-            'host' => env("host"),
-            'user' =>  env("user"),
-            'pass' => env("pass")
-        ]);
-
+        $host ="103.158.155.7";
+        $user = "wahyu";
+        $pass = "wahyu2000";
+                $client = new Client([
+                    'host' => $host,
+                    'user' =>  $user,
+                    'pass' => $pass
+                ]);
         for($i = 0; $i <= 200; $i++) {
             $password = Str::random(5);
             $username = Str::random(2) . "-lugaru";
@@ -106,22 +125,28 @@ class VoucherController extends Controller
     }
 
     public function destroy($id){
-        $client = new Client([
-            'host' => env("host"),
-            'user' =>  env("user"),
-            'pass' => env("pass")
-        ]);
+        $host ="103.158.155.7";
+        $user = "wahyu";
+        $pass = "wahyu2000";
+                $client = new Client([
+                    'host' => $host,
+                    'user' =>  $user,
+                    'pass' => $pass
+                ]);
         $client->query(['/ppp/secret/remove', '=.id='.$id])->read();
 
         return redirect('/voucher');
     }
 
     public function enable($id) {
-        $client = new Client([
-            'host' => env("host"),
-            'user' =>  env("user"),
-            'pass' => env("pass")
-        ]);
+        $host ="103.158.155.7";
+        $user = "wahyu";
+        $pass = "wahyu2000";
+                $client = new Client([
+                    'host' => $host,
+                    'user' =>  $user,
+                    'pass' => $pass
+                ]);
         $client->query(['/ppp/secret/enable', '=.id='.$id])->read();
      
         return redirect('/voucher');
@@ -134,15 +159,36 @@ class VoucherController extends Controller
      * 
      */
     public function disable($id) {
-        $client = new Client([
-            'host' => env("host"),
-            'user' =>  env("user"),
-            'pass' => env("pass")
-        ]);
+        $host ="103.158.155.7";
+        $user = "wahyu";
+        $pass = "wahyu2000";
+                $client = new Client([
+                    'host' => $host,
+                    'user' =>  $user,
+                    'pass' => $pass
+                ]);
         $client->query(['/ppp/secret/disable', '=.id='.$id])->read();
      
         return redirect('/voucher');
       
+    }
+
+    public function save(Request $request){
+        $host ="103.158.155.7";
+        $user = "wahyu";
+        $pass = "wahyu2000";
+                $client = new Client([
+                    'host' => $host,
+                    'user' =>  $user,
+                    'pass' => $pass
+                ]);
+      
+      
+        $client->query([
+            '/ip/hotspot/user/add',  
+            '=name='.$request->voucher
+        ])->read();
+        return redirect('/voucher');
     }
 }
 

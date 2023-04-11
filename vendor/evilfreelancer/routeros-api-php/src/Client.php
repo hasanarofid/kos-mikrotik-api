@@ -4,10 +4,13 @@ namespace RouterOS;
 
 use DivineOmega\SSHConnection\SSHConnection;
 use RouterOS\Exceptions\ClientException;
+use RouterOS\Exceptions\ConnectException;
+use RouterOS\Exceptions\BadCredentialsException;
 use RouterOS\Exceptions\ConfigException;
 use RouterOS\Interfaces\ClientInterface;
 use RouterOS\Interfaces\QueryInterface;
 use RouterOS\Helpers\ArrayHelper;
+use Spatie\Ssh\Ssh;
 use function array_keys;
 use function array_shift;
 use function chr;
@@ -57,6 +60,8 @@ class Client implements Interfaces\ClientInterface
      * @param bool                                       $autoConnect If false it will skip auto-connect stage if not need to instantiate connection
      *
      * @throws \RouterOS\Exceptions\ClientException
+     * @throws \RouterOS\Exceptions\ConnectException
+     * @throws \RouterOS\Exceptions\BadCredentialsException
      * @throws \RouterOS\Exceptions\ConfigException
      * @throws \RouterOS\Exceptions\QueryException
      */
@@ -82,7 +87,7 @@ class Client implements Interfaces\ClientInterface
 
         // Throw error if cannot to connect
         if (false === $this->connect()) {
-            throw new ClientException('Unable to connect to ' . $config->get('host') . ':' . $config->get('port'));
+            throw new ConnectException('Unable to connect to ' . $config->get('host') . ':' . $config->get('port'));
         }
     }
 
@@ -226,15 +231,19 @@ class Client implements Interfaces\ClientInterface
     /**
      * Read RAW response from RouterOS, it can be /export command results also, not only array from API
      *
+     * @param array $options Additional options
+     *
      * @return array|string
      * @since 1.0.0
      */
-    public function readRAW()
+    public function readRAW(array $options = [])
     {
         // By default response is empty
         $response = [];
         // We have to wait a !done or !fatal
         $lastReply = false;
+        // Count !re in response
+        $countResponse = 0;
 
         // Convert strings to array and return results
         if ($this->isCustomOutput()) {
@@ -245,6 +254,11 @@ class Client implements Interfaces\ClientInterface
         // Read answer from socket in loop
         while (true) {
             $word = $this->connector->readWord();
+
+            //Limit response number to finish the read
+            if (isset($options['count']) && $countResponse >= (int) $options['count']) {
+                $lastReply = true;
+            }
 
             if ('' === $word) {
                 if ($lastReply) {
@@ -266,6 +280,11 @@ class Client implements Interfaces\ClientInterface
             if ('!done' === $word || '!fatal' === $word) {
                 $lastReply = true;
             }
+
+            // If we get a !re line in response, we increment the variable
+            if ('!re' === $word) {
+                $countResponse++;
+            }
         }
 
         // Parse results and return
@@ -281,14 +300,15 @@ class Client implements Interfaces\ClientInterface
      * Reply ends with a complete !done or !fatal block (ended with 'empty line')
      * A !fatal block precedes TCP connexion close
      *
-     * @param bool $parse If need parse output to array
+     * @param bool  $parse   If need parse output to array
+     * @param array $options Additional options
      *
      * @return mixed
      */
-    public function read(bool $parse = true)
+    public function read(bool $parse = true, array $options = [])
     {
         // Read RAW response
-        $response = $this->readRAW();
+        $response = $this->readRAW($options);
 
         // Return RAW configuration if custom output is set
         if ($this->isCustomOutput()) {
@@ -303,12 +323,14 @@ class Client implements Interfaces\ClientInterface
     /**
      * Read using Iterators to improve performance on large dataset
      *
+     * @param array $options Additional options
+     *
      * @return \RouterOS\ResponseIterator
      * @since 1.0.0
      */
-    public function readAsIterator(): ResponseIterator
+    public function readAsIterator(array $options = []): ResponseIterator
     {
-        return new ResponseIterator($this);
+        return new ResponseIterator($this, $options);
     }
 
     /**
@@ -321,7 +343,7 @@ class Client implements Interfaces\ClientInterface
      *
      * Based on RouterOSResponseArray solution by @arily
      *
-     * @see https://github.com/arily/RouterOSResponseArray
+     * @see   https://github.com/arily/RouterOSResponseArray
      * @since 1.0.0
      */
     private function rosario(array $raw): array
@@ -428,6 +450,7 @@ class Client implements Interfaces\ClientInterface
      *
      * @return bool
      * @throws \RouterOS\Exceptions\ClientException
+     * @throws \RouterOS\Exceptions\BadCredentialsException
      * @throws \RouterOS\Exceptions\ConfigException
      * @throws \RouterOS\Exceptions\QueryException
      */
@@ -470,7 +493,7 @@ class Client implements Interfaces\ClientInterface
 
         // If RouterOS answered with invalid credentials then throw error
         if (!empty($response[0]) && '!trap' === $response[0]) {
-            throw new ClientException('Invalid user name or password');
+            throw new BadCredentialsException('Invalid user name or password');
         }
 
         // Return true if we have only one line from server and this line is !done
@@ -548,22 +571,47 @@ class Client implements Interfaces\ClientInterface
      *
      * @return string
      * @throws \RouterOS\Exceptions\ConfigException
+     * @throws \RouterOS\Exceptions\ClientException
      * @since 1.3.0
      */
     public function export(string $arguments = null): string
     {
-        // Connect to remote host
-        $connection =
-            (new SSHConnection())
-                ->timeout($this->config('timeout'))
-                ->to($this->config('host'))
-                ->onPort($this->config('ssh_port'))
-                ->as($this->config('user') . '+etc')
-                ->withPassword($this->config('pass'))
-                ->connect();
+        // Set params
+        $sshHost       = $this->config('host');
+        $sshPort       = $this->config('ssh_port');
+        $sshUser       = $this->config('user') . '+etc';
+        $sshPrivateKey = $this->config('ssh_private_key');
+        $sshTimeout    = $this->config('ssh_timeout');
 
-        // Run export command
-        $command = $connection->run('/export' . ' ' . $arguments);
+        try {
+            // Connect to remote host
+            $connection = Ssh::create($sshUser, $sshHost, $sshPort)
+                ->disableStrictHostKeyChecking()
+                ->usePrivateKey($sshPrivateKey);
+
+            // Run export command
+            $command = $connection->executeAsync('/export' . ' ' . $arguments);
+
+        } catch (\Throwable $e) {
+            throw new ClientException($e);
+        }
+
+        // Wait until command completed, or timeout reached
+        $startTime = time();
+        while (true) {
+            // Exit from loop if timeout reached
+            if (time() > $startTime + $sshTimeout) {
+                throw new ClientException('SSH timeout reached');
+            }
+
+            // Exit from loop if completed
+            if (!$command->isRunning()) {
+                break;
+            }
+
+            // Wait a sec
+            sleep(1);
+        }
 
         // Return the output
         return $command->getOutput();

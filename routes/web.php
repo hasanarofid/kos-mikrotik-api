@@ -20,8 +20,7 @@ Route::get('/testing', [App\Http\Controllers\TestingController::class, 'index'])
 Route::get('/home', 'HomeController@index');
 // voucher
 Route::get('/voucher', 'VoucherController@index');
-Route::get('/save-voucher', 'VoucherController@save');
-
+Route::post('/save-voucher', 'VoucherController@save');
 Route::get('/voucher/add', 'VoucherController@voucher');
 Route::get('/voucher/store', 'VoucherController@store');
 Route::get('/voucher/destroy', 'VoucherController@destroy');
@@ -72,8 +71,6 @@ Route::get('/hotspot/queue/enable/{id}', 'QueueController@enable');
 //traffic
 Route::get('/traffic', 'TrafficController@index');
 Route::get('/data','TrafficController@data');
-Route::get('/data2','TrafficController@data2');
-Route::get('/data3','TrafficController@data3');
 //rebbot
 Route::get('/rebbot', 'RebootController@index');
 Route::get('/rebbotproses', 'RebootController@reboot');

@@ -3,7 +3,7 @@
 @section('title', 'Voucher')
 
 @section('content')
-<div class="content-wrapper">
+<div class="container">
     <!-- Content Header (Page header) -->
     <div class="content-header">
       <div class="container-fluid">
@@ -96,18 +96,26 @@
         </button>
       </div>
       <div class="modal-body">
-       <form action="{{ '/save-voucher' }}" method="POST" >
+        <form role="form" method="POST" action="{{ '/save-voucher' }}">
+          @csrf
+        <div class="card-body">
           <div class="form-group">
-            <label for="">Voucher</label>
+            <label for="username">Generate Voucher</label>
             <input type="text" name="voucher" class="from-control" id="voucher" placeholder="inputkan voucher" required>
           </div>
-       
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-primary">Save </button>
+        
+      
+        </div>
 
+        {{-- service, profile, dan remote address --}}
+        <!-- /.card-body -->
+
+        <div class="card-footer">
+          <button type="submit" class="btn btn-primary">Tambah</button>
+        </div>
       </form>
+
+     
       </div>
     </div>
   </div>

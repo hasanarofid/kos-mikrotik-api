@@ -103,13 +103,7 @@
     }
   </style>
   @yield('content')
-  <footer class="main-footer text-sm">
-    <strong>Copyright &copy; 2023 <a href="#">Monitoring ISP </a>.</strong>
-    All rights reserved.
-    <div class="float-right d-none d-sm-inline-block">
-      <b>Admin Panel Mikrotik Version</b> 3.0.5
-    </div>
-  </footer>
+ 
 
   </body>
 
@@ -144,11 +138,11 @@
 <!-- overlayScrollbars -->
 <script src="{{ asset('plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js') }}"></script>
 <!-- AdminLTE App -->
-<script src="{{ asset('dist/js/adminlte.js') }}"></script>
+{{-- <script src="{{ asset('dist/js/adminlte.js') }}"></script> --}}
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
 
 <!-- AdminLTE for demo purposes -->
-<script src="{{ asset('dist/js/demo.js') }}"></script>
+{{-- <script src="{{ asset('dist/js/demo.js') }}"></script> --}}
 @stack('js-page')
 </body>
 </html>
