@@ -16,16 +16,11 @@ class LogController extends Controller
     }
 
     public function log(){
-
-$host ="103.158.155.7";
-$user = "wahyu";
-$pass = "wahyu2000";
-        $client = new Client([
-            'host' => $host,
-            'user' =>  $user,
-            'pass' => $pass
-        ]);
-        
+            $client = new Client([
+                'host' => env("host"),
+                'user' =>  env("user"),
+                'pass' => env("pass")
+            ]);        
          $data = $client->query('/log/print')->read();
         // $sukses = 'berhasil reboot';
         

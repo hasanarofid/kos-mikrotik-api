@@ -3,7 +3,7 @@
 @section('title', 'Log')
 
 @section('content')
-<div class="content-wrapper">
+<div class="container">
     <!-- Content Header (Page header) -->
     <div class="content-header">
       <div class="container-fluid">
@@ -43,7 +43,7 @@
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body p-0">
-                          <table class="table table-striped">
+                          <table class="table table-striped" id="table">
                             <thead>
                               <tr>
                                 <th>No</th>
@@ -81,3 +81,22 @@
 </div>
     
 @endsection
+@push('js-page')
+
+
+<script src="//cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
+
+
+<script>
+  $(document).ready(function() {
+    $('#table').DataTable(
+      {
+        "lengthMenu": [10,20, 40, 60, 80, 100],
+        "pageLength": 10
+      }
+    );
+} );
+</script>
+
+
+@endpush

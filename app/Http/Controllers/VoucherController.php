@@ -12,46 +12,41 @@ class VoucherController extends Controller
 
 
     public function index() {
-        $host ="103.158.155.7";
-        $user = "wahyu";
-        $pass = "wahyu2000";
-                $client = new Client([
-                    'host' => $host,
-                    'user' =>  $user,
-                    'pass' => $pass
-                ]);
+        $client = new Client([
+            'host' => env("host"),
+            'user' =>  env("user"),
+            'pass' => env("pass")
+        ]);
+
         
-        $data = $client->query('/ip/hotspot/user/print')->read();
+        $data = $client->query('/ip/hotspot/user/profile/print')->read();
+        // dd($data);
         $user = collect($data)->except(['0'])->toArray(); 
         $aktif = $client->query('/ip/hotspot/active/print')->read();
-        // dd($data);die;
+        // dd($user);die;
         return view('voucher.index', compact('user', 'aktif','data'));
         
     }
 
     public function add() {
-        $host ="103.158.155.7";
-        $user = "wahyu";
-        $pass = "wahyu2000";
-                $client = new Client([
-                    'host' => $host,
-                    'user' =>  $user,
-                    'pass' => $pass
-                ]);
+        $client = new Client([
+            'host' => env("host"),
+            'user' =>  env("user"),
+            'pass' => env("pass")
+        ]);
+
         $profile = $client->query('/ppp/secret/add')->read();
         // dd($profile);
         return view('voucher.addUser', compact('profile'));
     }
 
     public function edit($id){
-        $host ="103.158.155.7";
-        $user = "wahyu";
-        $pass = "wahyu2000";
-                $client = new Client([
-                    'host' => $host,
-                    'user' =>  $user,
-                    'pass' => $pass
-                ]);
+        $client = new Client([
+            'host' => env("host"),
+            'user' =>  env("user"),
+            'pass' => env("pass")
+        ]);
+
         $query =
         (new Query('/ppp/secret/print'))
             ->where('.id', $id);          
@@ -59,38 +54,33 @@ class VoucherController extends Controller
             return view('voucher.edit', compact('detail'));
     }
 
-    public function update(Request $request) {
-        $host ="103.158.155.7";
-        $user = "wahyu";
-        $pass = "wahyu2000";
-                $client = new Client([
-                    'host' => $host,
-                    'user' =>  $user,
-                    'pass' => $pass
-                ]);
-                $query = (new Query('/ppp/secret/set'))
-                ->equal('.id', $request->id)
-                ->equal('name', $request->username)
-                ->equal('password', $request->password)
-                ->equal('service', $request->service)
-                ->equal('profile', $request->profile)
-                ->equal('remote-address', $request->remote_address);
+    // public function update(Request $request) {
+    //     $client = new Client([
+    //         'host' => env("host"),
+    //         'user' =>  env("user"),
+    //         'pass' => env("pass")
+    //     ]);
+
+    //             $query = (new Query('/ppp/secret/set'))
+    //             ->equal('.id', $request->id)
+    //             ->equal('name', $request->username)
+    //             ->equal('password', $request->password)
+    //             ->equal('service', $request->service)
+    //             ->equal('profile', $request->profile)
+    //             ->equal('remote-address', $request->remote_address);
         
-                $client->query($query)->read();
-        return redirect('/voucher');
-    }
+    //             $client->query($query)->read();
+    //     return redirect('/voucher');
+    // }
 
     public function store(Request $request) {
 
-        dd($request);
-        $host ="103.158.155.7";
-        $user = "wahyu";
-        $pass = "wahyu2000";
-                $client = new Client([
-                    'host' => $host,
-                    'user' =>  $user,
-                    'pass' => $pass
-                ]);
+        $client = new Client([
+            'host' => env("host"),
+            'user' =>  env("user"),
+            'pass' => env("pass")
+        ]);
+
 // dd($request);
         $client->query([
         '/ppp/secret/add',  
@@ -107,14 +97,12 @@ class VoucherController extends Controller
 
 
     public function quick() {
-        $host ="103.158.155.7";
-        $user = "wahyu";
-        $pass = "wahyu2000";
-                $client = new Client([
-                    'host' => $host,
-                    'user' =>  $user,
-                    'pass' => $pass
-                ]);
+        $client = new Client([
+            'host' => env("host"),
+            'user' =>  env("user"),
+            'pass' => env("pass")
+        ]);
+
         for($i = 0; $i <= 200; $i++) {
             $password = Str::random(5);
             $username = Str::random(2) . "-lugaru";
@@ -125,28 +113,24 @@ class VoucherController extends Controller
     }
 
     public function destroy($id){
-        $host ="103.158.155.7";
-        $user = "wahyu";
-        $pass = "wahyu2000";
-                $client = new Client([
-                    'host' => $host,
-                    'user' =>  $user,
-                    'pass' => $pass
-                ]);
+        $client = new Client([
+            'host' => env("host"),
+            'user' =>  env("user"),
+            'pass' => env("pass")
+        ]);
+
         $client->query(['/ppp/secret/remove', '=.id='.$id])->read();
 
         return redirect('/voucher');
     }
 
     public function enable($id) {
-        $host ="103.158.155.7";
-        $user = "wahyu";
-        $pass = "wahyu2000";
-                $client = new Client([
-                    'host' => $host,
-                    'user' =>  $user,
-                    'pass' => $pass
-                ]);
+        $client = new Client([
+            'host' => env("host"),
+            'user' =>  env("user"),
+            'pass' => env("pass")
+        ]);
+
         $client->query(['/ppp/secret/enable', '=.id='.$id])->read();
      
         return redirect('/voucher');
@@ -159,14 +143,12 @@ class VoucherController extends Controller
      * 
      */
     public function disable($id) {
-        $host ="103.158.155.7";
-        $user = "wahyu";
-        $pass = "wahyu2000";
-                $client = new Client([
-                    'host' => $host,
-                    'user' =>  $user,
-                    'pass' => $pass
-                ]);
+        $client = new Client([
+            'host' => env("host"),
+            'user' =>  env("user"),
+            'pass' => env("pass")
+        ]);
+
         $client->query(['/ppp/secret/disable', '=.id='.$id])->read();
      
         return redirect('/voucher');
@@ -174,20 +156,112 @@ class VoucherController extends Controller
     }
 
     public function save(Request $request){
-        $host ="103.158.155.7";
-        $user = "wahyu";
-        $pass = "wahyu2000";
-                $client = new Client([
-                    'host' => $host,
-                    'user' =>  $user,
-                    'pass' => $pass
-                ]);
+        $client = new Client([
+            'host' => env("host"),
+            'user' =>  env("user"),
+            'pass' => env("pass")
+        ]);
+
       
       
         $client->query([
-            '/ip/hotspot/user/add',  
-            '=name='.$request->voucher
+            '/ip/hotspot/user/profile/add',  
+            '=name='.$request->name,
+            '=rate-limit='.$request->rate
         ])->read();
+        return redirect('/voucher');
+    }
+
+    public function daftarvoucher(Request $request){
+        $name = $request->name;
+        $id = $request->id;
+
+        $client = new Client([
+            'host' => env("host"),
+            'user' =>  env("user"),
+            'pass' => env("pass")
+        ]);
+        $query2 =
+        (new Query('/ip/hotspot/user/profile/print'))
+            ->where('.id', $id);
+    
+    // Send query and read response from RouterOS
+    $data = $client->query($query2)->read();
+
+        // dd($data[0]['name']);
+        $query =
+    (new Query('/ip/hotspot/user/print'))
+        ->where('profile', $name);
+
+// Send query and read response from RouterOS
+$user = $client->query($query)->read();
+// dd($user);
+    $result = array();
+        $result['name'] = $name;
+        $result['id'] = $id;
+        $result['voucher'] = $data[0]['name'];
+        $result['rate'] = !empty($data[0]['rate-limit']) ? $data[0]['rate-limit'] : '';
+        $result['total'] = !empty($user) ? count($user) : 0;
+
+        
+        $result['user'] = $user;
+
+    return json_encode($result);
+
+    }
+
+    public function showvoucher(Request $request){
+        $name = $request->name;
+        $id = $request->id;
+
+        $client = new Client([
+            'host' => env("host"),
+            'user' =>  env("user"),
+            'pass' => env("pass")
+        ]);
+        $query2 =
+        (new Query('/ip/hotspot/user/profile/print'))
+            ->where('.id', $id);
+    
+    // Send query and read response from RouterOS
+    $data = $client->query($query2)->read();
+
+        // dd($data[0]['name']);
+        $query =
+    (new Query('/ip/hotspot/user/print'))
+        ->where('profile', $name);
+
+// Send query and read response from RouterOS
+$user = $client->query($query)->read();
+// dd($user);
+    $result = array();
+    $result['name'] = $name;
+    $result['id'] = $id;
+        $result['voucher'] = $data[0]['name'];
+        $result['rate'] = !empty($data[0]['rate-limit']) ? $data[0]['rate-limit'] : '';
+        $result['total'] = !empty($user) ? count($user) : 0;
+
+        
+        $result['user'] = $user;
+
+    return json_encode($result);
+    }
+
+    public function update(Request $request){
+        // dd($request->rate);
+        $client = new Client([
+            'host' => env("host"),
+            'user' =>  env("user"),
+            'pass' => env("pass")
+        ]);
+
+    
+                    $query = (new Query('/ip/hotspot/user/profile/set'))
+                    ->equal('.id',$request->id)
+                    ->equal('name', $request->name)
+                    ->equal('rate-limit',$request->rate);
+                    $update =   $client->query($query)->read();
+                // dd($update);
         return redirect('/voucher');
     }
 }

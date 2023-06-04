@@ -3,7 +3,7 @@
 @section('title', 'User Aktif')
 
 @section('content')
-<div class="content-wrapper">
+<div class="container">
     <!-- Content Header (Page header) -->
     <div class="content-header">
       <div class="container-fluid">
@@ -34,7 +34,7 @@
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body p-0">
-                          <table class="table table-striped">
+                          <table class="table table-striped" id="table">
                             <thead>
                               <tr>
                                 <th>No</th>
@@ -45,25 +45,33 @@
                                 <th>Download</th>
                                 <th>Upload</th>
                                 <th>Kadalwarsa</th>
-                            
+                                {{-- User
+                                Address
+                                MAC address 
+                                Uptime
+                                Byte in
+                                Byte out
+                                Comment  --}}
                               </tr>
                             </thead>
-                            @foreach ($aktif as $u)
-                      
                             <tbody>
+                            @foreach ($aktif as $u)
+                            {{-- {{ dd($u); }} --}}
+                           
                               <tr>
                                 <td>{{ $loop->index + 1 }}</td>
-                                <td> {{ $u['name'] }}</td>
-                                <td> {{ $u['address'] }}</td>
-                                <td> {{ $u['caller-id'] }}</td>
-                                <td> {{ $u['uptime'] }}</td>
-                                <td> {{ $u['limit-bytes-in'] }}</td>
-                                <td> {{ $u['limit-bytes-out'] }}</td>
-                                <td>{{ $u['encoding'] }}</td>
+                                <td> {{ !empty($u['user']) ? $u['user'] : '-' }}</td>
+                                <td> {{ !empty($u['address']) ? $u['address'] : '-'  }}</td>
+                                <td> {{ !empty($u['mac-address']) ? $u['mac-address'] : '-'  }}</td>
+                                <td> {{ !empty($u['bytes-in']) ? $u['bytes-in'] : '-'  }}</td>
+                                <td> {{ !empty($u['bytes-out']) ? $u['bytes-out'] : '-'  }}</td>
+                                <td> {{ !empty($u['uptime']) ? $u['uptime'] : '-' }}</td>
+                                <td>{{ !empty($u['comment']) ? $u['comment'] : '-' }}</td>
 
                               </tr>
-                            </tbody>
+                           
                             @endforeach
+                          </tbody>
                           </table>
                         </div>
                         <!-- /.card-body -->
@@ -77,3 +85,22 @@
 </div>
     
 @endsection
+@push('js-page')
+
+
+<script src="//cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
+
+
+<script>
+  $(document).ready(function() {
+    $('#table').DataTable(
+      {
+        "lengthMenu": [10,20, 40, 60, 80, 100],
+        "pageLength": 10
+      }
+    );
+} );
+</script>
+
+
+@endpush

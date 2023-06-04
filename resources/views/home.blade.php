@@ -52,14 +52,14 @@
                     @endphp
                     <h3>{{ 
                       
-                      $resource[0]['cpu'] }}<sup style="font-size: 20px"></sup></h3>
+                      $resource[0]['board-name'] }}<sup style="font-size: 20px"></sup></h3>
     
                     <p>Resource</p>
                   </div>
                   <div class="icon">
                     <i class="ion ion-flash"></i>
                   </div>
-                  <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                  {{-- <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a> --}}
                 </div>
               </div>
               <!-- ./col -->
@@ -73,14 +73,13 @@
                   @endphp
                   <h3>{{ 
                     
-                    $resource[0]['cpu-frequency'] }}<sup style="font-size: 20px"></sup></h3>
+                    $resource[0]['cpu-load'] }} % <sup style="font-size: 20px"></sup></h3>
   
-                  <p>cpu frequency</p>
+                  <p>cpu load</p>
                 </div>
                 <div class="icon">
                   <i class="ion ion-flash"></i>
                 </div>
-                <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
               </div>
             </div>
             <!-- ./col -->
@@ -93,15 +92,15 @@
                         // dd($resource);
                     @endphp
                     <h3>{{ 
+                      substr($resource[0]['free-memory'], 0, 3)
                       
-                      $resource[0]['free-memory'] }}<sup style="font-size: 20px"></sup></h3>
+ }} MB <sup style="font-size: 20px"></sup></h3>
     
                     <p>free memory</p>
                   </div>
                   <div class="icon">
                     <i class="ion ion-flash"></i>
                   </div>
-                  <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
                 </div>
               </div>
               <!-- ./col -->
@@ -143,14 +142,14 @@
                   @php
                       // dd($resource);
                   @endphp
-                  <h3> <a href="{{ '/tambah-user' }}"> <i class="fa fa-plus"></i> <sup style="font-size: 20px"></sup> </a></h3>
+                  <h3> <a href="{{ '/voucher' }}"> <i class="fa fa-plus"></i> <sup style="font-size: 20px"></sup> </a></h3>
   
                   <p>Tambah User</p>
                 </div>
                 <div class="icon">
                   <i class="fa fa-plus"></i>
                 </div>
-                <a href="{{ '/tambah-user' }}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                <a href="{{ '/voucher' }}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
               </div>
             </div>
             <!-- ./col -->
@@ -160,129 +159,5 @@
         </div>
    
      
-    </section>
-    </div>
     
     @endsection
-    
-    @push('js-page')
-    <script src="https://code.highcharts.com/highcharts.js"></script>
-    <script src="https://code.highcharts.com/gantt/modules/exporting.js"></script>
-    <script src="https://code.highcharts.com/gantt/modules/accessibility.js"></script>
-    
-    <script type="text/javascript">
-        function refreshGrafik(obj){
-          requestDatta($(obj).val());
-        }
-    
-      var chart;
-      
-      function requestDatta(interface) {
-        $.ajax({
-          url: 'data?interface='+interface,
-          datatype: "json",
-          success: function(data) {
-             var midata = JSON.parse(data);
-            console.log(midata);
-            if( midata.length > 0 ) {
-              var TX=parseInt(midata[0].data);
-              var RX=parseInt(midata[1].data);
-              var x = (new Date()).getTime(); 
-              shift=chart.series[0].data.length > 19;
-              chart.series[0].addPoint([x, TX], true, shift);
-              chart.series[1].addPoint([x, RX], true, shift);
-              document.getElementById("tabletx").innerHTML=convert(TX);
-              document.getElementById("tablerx").innerHTML=convert(RX);
-            }else{
-              document.getElementById("tabletx").innerHTML="0";
-              document.getElementById("tablerx").innerHTML="0";
-            }
-          }
-        });
-      }	
-    
-        
-      
-    
-    
-    $(document).ready(function() {
-          Highcharts.setOptions({
-            global: {
-              useUTC: false
-            }
-          });
-      
-    
-               chart = new Highcharts.Chart({
-             chart: {
-            renderTo: 'graph',
-            animation: Highcharts.svg,
-            type: 'spline',
-            events: {
-              load: function () {
-                setInterval(function () {
-                  requestDatta(document.getElementById("interface").value);
-                }, 1000);
-              }				
-          }
-         },
-         title: {
-          text: 'Monitoring Daily'
-         },
-         xAxis: {
-          type: 'datetime',
-            tickPixelInterval: 150,
-            maxZoom: 20 * 1000
-         },
-         
-        yAxis: {
-                                minPadding: 0.2,
-                                maxPadding: 0.2,
-                                title: {
-                                  text: 'Traffic'
-                                },
-                                labels: {
-                                  formatter: function () {      
-                                    var bytes = this.value;                          
-                                    var sizes = ['bps', 'kbps', 'Mbps', 'Gbps', 'Tbps'];
-                                    if (bytes == 0) return '0 bps';
-                                    var i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
-                                    return parseFloat((bytes / Math.pow(1024, i)).toFixed(2)) + ' ' + sizes[i];                    
-                                  },
-                                },       
-                            },
-                series: [{
-                    name: 'TX',
-                    data: []
-                }, {
-                    name: 'RX',
-                    data: []
-                }],
-            tooltip: {
-            headerFormat: '<b>{series.name}</b><br/>',
-            pointFormat: '{point.x:%Y-%m-%d %H:%M:%S}<br/>{point.y}'
-        },
-    
-    
-        });
-    
-    
-      });
-      function convert( bytes) {      
-                                                      
-                                    var sizes = ['bps', 'kbps', 'Mbps', 'Gbps', 'Tbps'];
-                                    if (bytes == 0) return '0 bps';
-                                    var i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
-                                    return parseFloat((bytes / Math.pow(1024, i)).toFixed(2)) + ' ' + sizes[i];                    
-                                  }
-    
-                                  // Activate the custom button
-    document.getElementById('pdf').addEventListener('click', function () {
-      Highcharts.charts[0].exportChart({
-        type: 'application/pdf'
-      });
-    });
-    
-       
-    </script>
-    @endpush

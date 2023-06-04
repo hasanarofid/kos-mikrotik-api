@@ -21,14 +21,19 @@ Route::get('/home', 'HomeController@index');
 // voucher
 Route::get('/voucher', 'VoucherController@index');
 Route::post('/save-voucher', 'VoucherController@save');
+Route::post('/update-voucher', 'VoucherController@update');
+
+
 Route::get('/voucher/add', 'VoucherController@voucher');
 Route::get('/voucher/store', 'VoucherController@store');
 Route::get('/voucher/destroy', 'VoucherController@destroy');
 Route::get('/voucher/edit/{id}', 'VoucherController@edit');
-Route::post('/voucher/update', 'VoucherController@update');
+// Route::post('/voucher/update', 'VoucherController@update');
 Route::post('/voucher/disable/{id', 'VoucherController@disable');
 Route::post('/voucher/enable/{id}', 'VoucherController@enable');
 
+Route::get('/daftarvoucher','VoucherController@daftarvoucher');
+Route::get('/showvoucher','VoucherController@showvoucher');
 
 // Hotspot
 
@@ -42,7 +47,6 @@ Route::get('/hotspot/user/disable/{id}', 'UserController@disable');
 Route::get('/hotspot/user/enable/{id}', 'UserController@enable');
 Route::get('user-aktif', 'UserController@useraktif');
 Route::get('user-all', 'UserController@userall');
-
 
 
 #log
@@ -71,6 +75,9 @@ Route::get('/hotspot/queue/enable/{id}', 'QueueController@enable');
 //traffic
 Route::get('/traffic', 'TrafficController@index');
 Route::get('/data','TrafficController@data');
+
+
+
 //rebbot
 Route::get('/rebbot', 'RebootController@index');
 Route::get('/rebbotproses', 'RebootController@reboot');

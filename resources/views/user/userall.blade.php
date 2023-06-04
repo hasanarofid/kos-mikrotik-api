@@ -34,7 +34,7 @@
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body p-0">
-                          <table class="table table-striped">
+                          <table class="table table-striped" id="table">
                             <thead>
                               <tr>
                                 <th>No</th>
@@ -48,12 +48,9 @@
                             
                               </tr>
                             </thead>
-                            @foreach ($user as $u)
-                      @php
-                          // dd($u);
-
-                      @endphp
                             <tbody>
+                     
+                            @foreach ($user as $u)
                               <tr>
                                 <td>{{ $loop->index + 1 }}</td>
                                 <td> {{ $u['name'] }}</td>
@@ -62,11 +59,12 @@
                                 <td> {{ !empty($u['bytes-in']) ? $u['bytes-in'] : '-'  }}</td>
                                 <td> {{ !empty($u['bytes-out']) ? $u['bytes-out'] : '-'  }}</td>
                                 <td> {{ !empty($u['uptime']) ? $u['uptime'] : '-' }}</td>
-                                <td>{{ !empty($u['encoding']) ? $u['encoding'] : '-' }}</td>
+                                <td>{{ !empty($u['comment']) ? $u['comment'] : '-' }}</td>
 
                               </tr>
-                            </tbody>
+                           
                             @endforeach
+                          </tbody>
                           </table>
                         </div>
                         <!-- /.card-body -->
@@ -80,3 +78,22 @@
 </div>
     
 @endsection
+@push('js-page')
+
+
+<script src="//cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
+
+
+<script>
+  $(document).ready(function() {
+    $('#table').DataTable(
+      {
+        "lengthMenu": [10,20, 40, 60, 80, 100],
+        "pageLength": 10
+      }
+    );
+} );
+</script>
+
+
+@endpush

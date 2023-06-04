@@ -26,6 +26,9 @@
   <link rel="stylesheet" href="{{ asset('plugins/summernote/summernote-bs4.css') }}">
   <!-- Google Font: Source Sans Pro -->
   <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+
+<link rel="stylesheet"
+    href="https://cdn.datatables.net/1.10.12/css/dataTables.bootstrap.min.css">
 </head>
 <body>
   <div class="bs-canvas-overlay bg-default position-fixed w-100 h-100"></div>
