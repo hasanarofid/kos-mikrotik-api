@@ -46,8 +46,8 @@ $interface = $_GET["interface"]; ;
 
     $query =
 (new Query('/interface/monitor-traffic'))
-    ->equal('interface', $interface);
-    // ->equal('once','daily');
+    ->equal('interface', $interface)
+    ->equal('once',true);
   
     $grafik = $client->query($query)->read();
     $rows = array(); $rows2 = array();

@@ -72,7 +72,7 @@
         </li>
 
         <li class="nav-item mt-2">
-          <a href="{{ '/rebbot' }}" class="nav-link ">
+          <a href="{{ '/filter' }}" class="nav-link ">
             <p class="fa fa-filter">
               Filter
             </p>

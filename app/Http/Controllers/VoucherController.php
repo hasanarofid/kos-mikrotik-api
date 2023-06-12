@@ -40,18 +40,63 @@ class VoucherController extends Controller
         return view('voucher.addUser', compact('profile'));
     }
 
-    public function edit($id){
+    public function edit($name,$id){
+        // dd($id);
         $client = new Client([
             'host' => env("host"),
             'user' =>  env("user"),
             'pass' => env("pass")
         ]);
 
+        $query2 =
+        (new Query('/ip/hotspot/user/profile/print'))
+            ->where('.id', $id);
+    
+    // Send query and read response from RouterOS
+    $data = $client->query($query2)->read();
+
+        // dd($data[0]['name']);
         $query =
-        (new Query('/ppp/secret/print'))
-            ->where('.id', $id);          
-            $detail = $client->query($query)->read();
-            return view('voucher.edit', compact('detail'));
+    (new Query('/ip/hotspot/user/print'))
+        ->where('profile', $name);
+
+// Send query and read response from RouterOS
+$user = $client->query($query)->read();
+
+            return view('voucher.edit', compact('data','user'));
+    }
+
+    public function useredit($id){
+        $client = new Client([
+            'host' => env("host"),
+            'user' =>  env("user"),
+            'pass' => env("pass")
+        ]);
+        $query2 =
+        (new Query('/ip/hotspot/user/profile/print'))
+            ->where('.id', $id);
+
+    $user = $client->query($query2)->read();
+
+// dd($user);
+            return view('voucher.useredit', compact('user'));
+    }
+
+    public function updateuser(Request $request){
+        $client = new Client([
+            'host' => env("host"),
+            'user' =>  env("user"),
+            'pass' => env("pass")
+        ]);
+        $query = (new Query('/ip/hotspot/user/profile/set'))
+        ->equal('.id',$request->id)
+        ->equal('name', $request->user)
+        ->equal('address', $request->address)
+
+        ->equal('rate-limit',$request->ratelimit);
+        $update =   $client->query($query)->read();
+
+        return redirect('/voucher');
     }
 
     // public function update(Request $request) {
@@ -248,14 +293,48 @@ $user = $client->query($query)->read();
     }
 
     public function update(Request $request){
-        // dd($request->rate);
+        // dd($request->all());
         $client = new Client([
             'host' => env("host"),
             'user' =>  env("user"),
             'pass' => env("pass")
         ]);
+        if(is_array($request->users)){
+            foreach($request->users as $key=>$value){
+                // dd($request->ratelimits[$key]);
+                $client->query([
+                    '/ip/hotspot/user/add',  
+                    '=name='.$value,
+                    '=address='.$request->address2[$key],
+                    '=comment='.$request->kadalwarsas[$key],
+                    '=profile='.$request->name
+                ])->read();
+                $client->query([
+                    '/queue/simple/add',  
+                    '=name='.$value,
+                    '=target='.$request->address2[$key],
+                    '=max-limit='.$request->ratelimits[$key]
+                    ])->read();
+            
+            }
+            
+        }else{
+            $client->query([
+                '/ip/hotspot/user/add',  
+                '=name='.$request->users,
+                '=address='.$request->address2,
+                '=comment='.$request->kadalwarsas,
+                '=profile='.$request->name
+            ])->read();
+            $client->query([
+                '/queue/simple/add',  
+                '=name='.$request->users,
+                '=target='.$request->address2,
+                '=max-limit='.$request->ratelimits
+                ])->read();
+        }
 
-    
+       
                     $query = (new Query('/ip/hotspot/user/profile/set'))
                     ->equal('.id',$request->id)
                     ->equal('name', $request->name)

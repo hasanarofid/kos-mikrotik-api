@@ -18,15 +18,18 @@ class HomeController extends Controller
 
             $user = $client->query('/ip/hotspot/user/print')->read();
             $aktif = $client->query('/ip/hotspot/active/print')->read();
+// /interface/print
 
         // $user = $client->query('ip/hotspot/user/print')->read();
         // $aktif = $client->query('/ip/hotspot/active/print')->read();
         $resource = $client->query('/system/resource/print')->read();
+        $interface = $client->query('/interface/print')->read();
+            // dd($interface);
         // dd($user);           
         $totalUser = count($user);
         $totalAktif = count($aktif);
 
        
-       return view('home', compact('totalUser', 'totalAktif', 'resource'));
+       return view('home', compact('totalUser', 'totalAktif', 'resource','interface'));
     }
 }

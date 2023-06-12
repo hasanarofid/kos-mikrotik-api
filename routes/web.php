@@ -27,14 +27,16 @@ Route::post('/update-voucher', 'VoucherController@update');
 Route::get('/voucher/add', 'VoucherController@voucher');
 Route::get('/voucher/store', 'VoucherController@store');
 Route::get('/voucher/destroy', 'VoucherController@destroy');
-Route::get('/voucher/edit/{id}', 'VoucherController@edit');
+Route::post('/update-user', 'VoucherController@updateuser');
+
+Route::get('/voucher/edit/{name}/{id}', 'VoucherController@edit');
 // Route::post('/voucher/update', 'VoucherController@update');
 Route::post('/voucher/disable/{id', 'VoucherController@disable');
 Route::post('/voucher/enable/{id}', 'VoucherController@enable');
 
 Route::get('/daftarvoucher','VoucherController@daftarvoucher');
 Route::get('/showvoucher','VoucherController@showvoucher');
-
+Route::get('/hotspot/user/edit/{id}', 'VoucherController@useredit');
 // Hotspot
 
 Route::get('/user', 'UserController@index');
@@ -45,6 +47,8 @@ Route::post('/hotspot/user/quick', 'UserController@quick');
 Route::get('/hotspot/user/remove/{id}', 'UserController@destroy');
 Route::get('/hotspot/user/disable/{id}', 'UserController@disable');
 Route::get('/hotspot/user/enable/{id}', 'UserController@enable');
+
+
 Route::get('user-aktif', 'UserController@useraktif');
 Route::get('user-all', 'UserController@userall');
 
@@ -82,6 +86,14 @@ Route::get('/data','TrafficController@data');
 Route::get('/rebbot', 'RebootController@index');
 Route::get('/rebbotproses', 'RebootController@reboot');
 
-// Route::get('/rebbot', function () {
-//     return redirect('/rebbot');
-// });
+
+//filter
+Route::get('/filter', 'FilterController@index');
+
+Route::get('/filter/add', 'FilterController@add');
+Route::get('/filter/edit/{id}', 'FilterController@edit');
+Route::post('/filter/update', 'FilterController@update');
+Route::post('/filter/store', 'FilterController@store');
+Route::get('/filter/remove/{id}', 'FilterController@destroy');
+Route::get('/filter/disable/{id}', 'FilterController@disable');
+Route::get('/filter/enable/{id}', 'FilterController@enable');

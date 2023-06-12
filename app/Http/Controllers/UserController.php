@@ -46,7 +46,7 @@ class UserController extends Controller
         ]);        
 
         $client->query([
-            '/ppp/secret/add',  
+            '/ip/hotspot/user/add',  
             '=name='.$request->username,
             '=address='.$request->address,
             '=caller-id='.$request->share,

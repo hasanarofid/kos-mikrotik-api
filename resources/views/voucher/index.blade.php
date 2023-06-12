@@ -69,23 +69,33 @@ $user = $client->query($query)->read();
     // dd($response);
     $total = !empty($user) ? count($user) : 0;
                             ?>
-                           
-
-                          <div class="col-sm-2" style="max-height: 130px; padding-top: 10px;padding-left:5px;padding-right:5px;max-width: 100%;">
-                            <h5 class="card-header bg-success d-flex justify-content-between align-items-center">
-                              <?php echo !empty($elements['name']) ? $elements['name'] : '-' ?>
-                              <br>
-                             Limit :  <?php echo !empty($elements['rate-limit']) ? $elements['rate-limit'] :      ''  ?> <br>
-                             User :  <?php echo $total ?> <br>
-                              <a type="button" onclick="lihat('{{ $elements['name'] }}','{{ $elements['.id'] }}')" class="btn btn-sm btn-warning center-block" data-toggle="tooltip" title="Open"><i class="fa fa-search"></i> </a>
-                              <a type="button" onclick="edit('{{ $elements['name'] }}','{{ $elements['.id'] }}')" class="btn btn-sm btn-info" data-toggle="tooltip" title="Edit"><i class="fa fa-edit"></i> </a>
+                           <div class="col-lg-3 col-6">
+                            <!-- small box -->
                             
-                            </h5>
+                            <div class="small-box bg-success">
+                                <h5 class="card-header bg-success d-flex justify-content-between align-items-center">
+                                  
+                                
+                                
+                                  <?php echo !empty($elements['name']) ? $elements['name'] : '-' ?>
+                                  <br>
+                                Limit :  <?php echo !empty($elements['rate-limit']) ? $elements['rate-limit'] :      ''  ?> <br>
+                                User :  <?php echo $total ?> 
+                                  <a  href="{{ '/voucher/edit/' }}{{ $elements['name'] }}/{{ $elements['.id'] }}" class="btn btn-sm btn-info" data-toggle="tooltip" title="Edit"><i class="fa fa-edit"></i> </a>
+                                
+                                </h5> 
+                              
+                              
+                            </div>
+                          </div>
+
+                         
+
+                          
 
                              
-                          </div>
                       <?php endforeach; ?>
-                      <div class="col-sm-2" style="padding-top: 10px;padding-left:5px;padding-right:5px;max-width: 100%;height:300px">
+                      <div class="col-lg-3 col-6" style="padding-top: 10px;padding-left:5px;padding-right:5px;max-width: 100%;height:300px">
                       <h5 class="card-header  bg-success d-flex justify-content-center">
                     
                         <button type="button" class="btn btn-sm btn-default center-block" data-toggle="modal" data-target="#exampleModal"><i class="fa fa-plus"></i> </button>
@@ -127,10 +137,10 @@ $user = $client->query($query)->read();
             <label for="username">Limit</label>
             <input type="text" class="form-control" name="rate" class="from-control" id="rate-limit" placeholder="inputkan voucher" required>
           </div>
-          {{-- <div class="form-group">
+          <div class="form-group">
             <label for="username">User</label>
-            <input type="text" class="form-control" name="user" class="from-control" id="rate-limit" placeholder="inputkan voucher" required>
-          </div> --}}
+            <input type="text" class="form-control" name="user" class="from-control" id="user23" placeholder="inputkan voucher" required>
+          </div>
       
         </div>
 
@@ -148,8 +158,8 @@ $user = $client->query($query)->read();
   </div>
 </div>
 
-<div class="modal  fade " id="exampleModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel2" aria-hidden="true">
-  <div class="modal-dialog " role="document">
+<div class="modal  fade bd-example-modal-lg" id="exampleModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel2" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalLabel2">List User Voucher</h5>
@@ -172,33 +182,47 @@ $user = $client->query($query)->read();
             <label for="username">Limit</label>
             <input type="text" class="form-control" name="rate" readonly class="from-control" id="rate-limit2" placeholder="inputkan voucher" >
           </div>
+          <hr>
+          <h3> Tambah user</h3>
           <div class="form-group">
             <label for="username">User</label>
-            <input type="text" class="form-control " name="total2" readonly class="from-control" id="total2" placeholder="inputkan voucher" >
+            <input type="text" class="form-control" name="user" id="user"  class="from-control"  placeholder="inputkan User" >
           </div>
 
-          {{-- <div class="form-group" id="user-edit" >
-            <label for="username">Tambah User</label>
-            <select name="user[]" id="user_id" class="form-control js-example-basic-multiple" multiple="multiple">
-              @php
-                  
-               
-        $userall = $client->query('/ip/hotspot/user/print')->read();
-              @endphp
-              @foreach($userall as  $lastName)
-              <option value="{{ $lastName['.id'] }}">{{ $lastName['name'] }}</option>
-              @endforeach
-            </select>
+          <div class="form-group">
+            <label for="username">Address</label>
+            <input type="text" class="form-control" name="address" id="address"  class="from-control" placeholder="inputkan Address" >
+          </div>
 
-          </div> --}}
+          <div class="form-group">
+            <label for="username">Rate Limit</label>
+            <input type="text" class="form-control" name="ratelimit" id="ratelimit"  class="from-control"  placeholder="inputkan Rate Limit" >
+          </div>
+
+          <div class="form-group">
+            <label for="username">Fup</label>
+            <input type="text" class="form-control" name="fup" id="fup"  class="from-control"  placeholder="inputkan Fup" >
+          </div>
+
+          <div class="form-group">
+            <label for="username">Kadalwarsa</label>
+            <input type="text" class="form-control" name="kadalwarsa" id="kadalwarsa"  class="from-control"  placeholder="inputkan Kadalwarsa" >
+          </div>
       
         </div>
+        <hr>
+        <a href="#" onclick="tambahUser()" class="btn btn-sm btn-success" > <i class="fa fa-plus"></i> </a>
+        <hr>
+
         <table class="table table-striped" id="list-user-dialgi">
           <thead>
             <tr>
               <th>No</th>
                                 <th>User</th>
-                                <th>Upload</th>
+                                <th>Address</th>
+                                <th>Rate Limit</th>
+                                <th>Fup</th>
+                              
                                 <th>Kadalwarsa</th>
             </tr>
           </thead>
@@ -208,7 +232,7 @@ $user = $client->query($query)->read();
         </table>
      
         <div class="card-footer" id="footer-edit">
-          <button type="submit" class="btn btn-primary">Edit</button>
+          <button type="submit" class="btn btn-primary">Save</button>
         </div>
       </form>
 
@@ -224,7 +248,35 @@ $user = $client->query($query)->read();
 @push('js-page')
 
 <script>
+function tambahUser(){
+ var user =  $("#user").val();
+ var address =  $("#address").val();
+ var ratelimit =  $("#ratelimit").val();
+ var fup =  $("#fup").val();
+ var kadalwarsa =  $("#kadalwarsa").val();
+ var rowCount = parseInt($('#list-user tr').length) + 1;
+var tr = '';
+ tr += "<tr>";
+                    tr += "<td>"+rowCount+"</td>";
+                    tr += "<td>"+user+" <input type='hidden' name='users[]' value='"+user+"' ></td>";
+                    tr += "<td>"+address+" <input type='hidden' name='address2[]' value='"+address+"' ></td>";
 
+                    tr += "<td>"+ratelimit+" <input type='hidden' name='ratelimits[]' value='"+ratelimit+"' ></td>";
+                    tr += "<td>"+fup+" <input type='hidden' name='fups[]' value='"+fup+"' ></td>";
+                    tr += "<td>"+kadalwarsa+" <input type='hidden' name='kadalwarsas[]' value='"+kadalwarsa+"' ></td>";
+
+                    tr +=  "</tr>";
+
+            console.log(tr);
+                $("#list-user").append(tr);
+
+                 $("#user").val('');
+ $("#address").val('');
+  $("#ratelimit").val('');
+  $("#fup").val('');
+ $("#kadalwarsa").val('');
+
+}
   function edit(name,id){
     $.ajax({
 			url: 'showvoucher?name='+name+'&id='+id,
@@ -237,7 +289,7 @@ $user = $client->query($query)->read();
         $("#rate-limit2").attr('readonly',false);
         
         $("#total2").attr('readonly',true);
-        // $("#user").attr('readonly',false);
+        // $("#user_id").attr('readonly',false);
         
         
         $("#id_profile").val(data.id);
@@ -250,20 +302,31 @@ $user = $client->query($query)->read();
           var no = 1;
           var tr="";
         $.each(data.user, function(index, values) {
-          // console.log(index);
+          console.log(data.user);
         
         var comment = '';
+        var address = '';
+
         if (typeof values.comment === "undefined") {
           comment = '-';
           }else{
-            comment = values.comment
+            comment = values.comment;
+          }
+          if (typeof values.address === "undefined") {
+            address = '-';
+          }else{
+            address = values.address;
           }
           // console.log(comment);
             
                     tr += "<tr>";
                     tr += "<td>"+no+"</td>";
                     tr += "<td>"+values.name+"</td>";
+                    tr += "<td>"+address+"</td>";
+
                     tr += "<td>"+values.uptime+"</td>";
+                    tr += "<td>"+values.uptime+"</td>";
+
                     tr += "<td>"+comment+"</td>";
                     tr +=  "</tr>";
 
