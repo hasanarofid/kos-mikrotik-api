@@ -26,7 +26,7 @@ Route::post('/update-voucher', 'VoucherController@update');
 
 Route::get('/voucher/add', 'VoucherController@voucher');
 Route::get('/voucher/store', 'VoucherController@store');
-Route::get('/voucher/destroy', 'VoucherController@destroy');
+// Route::get('/voucher/destroy', 'VoucherController@destroy');
 Route::post('/update-user', 'VoucherController@updateuser');
 
 Route::get('/voucher/edit/{name}/{id}', 'VoucherController@edit');
@@ -44,9 +44,9 @@ Route::get('/user', 'UserController@index');
 Route::get('tambah-user', 'UserController@add');
 Route::post('/hotspot/user/store', 'UserController@store');
 Route::post('/hotspot/user/quick', 'UserController@quick');
-Route::get('/hotspot/user/remove/{id}', 'UserController@destroy');
-Route::get('/hotspot/user/disable/{id}', 'UserController@disable');
-Route::get('/hotspot/user/enable/{id}', 'UserController@enable');
+Route::get('/hotspot/user/remove/{id}/{user}/{id_vc}', 'VoucherController@destroy');
+Route::get('/hotspot/user/disable/{id}/{user}/{id_vc}', 'VoucherController@disable');
+Route::get('/hotspot/user/enable/{id}/{user}/{id_vc}', 'VoucherController@enable');
 
 
 Route::get('user-aktif', 'UserController@useraktif');

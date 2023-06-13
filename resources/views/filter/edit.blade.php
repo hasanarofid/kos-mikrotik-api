@@ -38,15 +38,29 @@
                     <input type="hidden" id="id" name="id" value="{{ $detail[0]['.id'] }}">
                   <div class="card-body">
                     <div class="form-group">
-                      <label for="username">Name Filter</label>
-                      <input type="text" class="form-control" id="name" name="name" value="{{ $detail[0]['list'] }}" placeholder="Masukan name">
+                      <label for="username">Nama</label>
+                      <input type="text" class="form-control" id="comment" name="comment" value="{{ !empty($detail[0]['comment']) ? $detail[0]['comment'] :  ''}}" placeholder="Masukan name">
                     </div>
                   
                     <div class="form-group">
-                      <label for="exampleInputPassword1">Address</label>
-                      <input type="text" class="form-control" id="target" name="target" value="{{ $detail[0]['address'] }}" placeholder="Target">
+                      <label for="exampleInputPassword1">Protocol</label>
+                      <input type="text" class="form-control" id="protocol" name="protocol" value="{{ !empty($detail[0]['protocol']) ? $detail[0]['protocol'] :  ''}}" placeholder="protocol">
                     </div>
-                    
+
+                    <div class="form-group">
+                      <label for="exampleInputPassword1">Port</label>
+                      <input type="text" class="form-control" id="dstport" name="dstport" value="{{ !empty($detail[0]['dst-port']) ? $detail[0]['dst-port'] :  ''}}" placeholder="Port">
+                    </div>
+
+                    <div class="form-group">
+                      <label for="exampleInputPassword1">DNS</label>
+                      <input type="text" class="form-control" id="dns" name="dns" value="{{ !empty($detail[0]['tls-host']) ? $detail[0]['tls-host'] :  ''}}" placeholder="DNS">
+                    </div>
+
+                    <div class="form-group">
+                      <label for="exampleInputPassword1">Time</label>
+                      <input type="text" class="form-control" id="time" name="time"value="{{ !empty($detail[0]['time']) ? $detail[0]['time'] :  ''}}"   placeholder="Time">
+                    </div>                    
                   </div>
 
                   {{-- service, profile, dan remote address --}}

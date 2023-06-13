@@ -62,6 +62,7 @@ class VoucherController extends Controller
 
 // Send query and read response from RouterOS
 $user = $client->query($query)->read();
+// dd($user);
 
             return view('voucher.edit', compact('data','user'));
     }
@@ -73,7 +74,7 @@ $user = $client->query($query)->read();
             'pass' => env("pass")
         ]);
         $query2 =
-        (new Query('/ip/hotspot/user/profile/print'))
+        (new Query('/ip/hotspot/user/print'))
             ->where('.id', $id);
 
     $user = $client->query($query2)->read();
@@ -157,28 +158,40 @@ $user = $client->query($query)->read();
         return redirect('/voucher');
     }
 
-    public function destroy($id){
+    public function destroy($id,$name,$id_vc){
+        // dd($name.' - '.$id_vc);
         $client = new Client([
             'host' => env("host"),
             'user' =>  env("user"),
             'pass' => env("pass")
         ]);
+        $query =
+        (new Query('/ip/hotspot/user/print'))
+            ->where('.id', $id);
+    
+    // Send query and read response from RouterOS
+    $user = $client->query($query)->read();
 
-        $client->query(['/ppp/secret/remove', '=.id='.$id])->read();
+   
+        $client->query(['/queue/simple/remove', '=name='.$user[0]['name']])->read();
 
-        return redirect('/voucher');
+
+        
+        $client->query(['/ip/hotspot/user/remove', '=.id='.$id])->read();
+
+        return redirect('/voucher/edit/'.$name.'/'.$id_vc);
     }
 
-    public function enable($id) {
+    public function enable($id,$name,$id_vc) {
         $client = new Client([
             'host' => env("host"),
             'user' =>  env("user"),
             'pass' => env("pass")
         ]);
 
-        $client->query(['/ppp/secret/enable', '=.id='.$id])->read();
+        $client->query(['/ip/hotspot/user/enable', '=.id='.$id])->read();
      
-        return redirect('/voucher');
+        return redirect('/voucher/edit/'.$name.'/'.$id_vc);
     }
 
     /**
@@ -187,16 +200,16 @@ $user = $client->query($query)->read();
      * @return type array
      * 
      */
-    public function disable($id) {
+    public function disable($id,$name,$id_vc) {
         $client = new Client([
             'host' => env("host"),
             'user' =>  env("user"),
             'pass' => env("pass")
         ]);
 
-        $client->query(['/ppp/secret/disable', '=.id='.$id])->read();
+        $client->query(['/ip/hotspot/user/disable', '=.id='.$id])->read();
      
-        return redirect('/voucher');
+        return redirect('/voucher/edit/'.$name.'/'.$id_vc);
       
     }
 

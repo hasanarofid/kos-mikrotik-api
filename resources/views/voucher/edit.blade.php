@@ -43,11 +43,11 @@
                   <div class="card-body">
                     <div class="form-group">
                       <label for="username">Generate Voucher</label>
-                      <input type="text" class="form-control" name="name" value="{{ $user[0]['name'] }}" class="from-control" id="name2" placeholder="inputkan voucher" >
+                      <input type="text" class="form-control" name="name" value="{{ $data[0]['name'] }}" class="from-control" id="name2" placeholder="inputkan voucher" >
                     </div>
                     <div class="form-group">
                       <label for="username">Limit</label>
-                      <input type="text" class="form-control" name="rate" value="{{ !empty($user[0]['rate-limit']) ? $user[0]['rate-limit'] : '' }}" class="from-control" id="rate-limit2" placeholder="limit voucher" >
+                      <input type="text" class="form-control" name="rate" value="{{ !empty($data[0]['rate-limit']) ? $data[0]['rate-limit'] : '' }}" class="from-control" id="rate-limit2" placeholder="limit voucher" >
                     </div>
                     <hr>
                     <h3> Tambah user</h3>
@@ -95,10 +95,11 @@
                       </tr>
                     </thead>
                     <tbody id="list-user">
-                    @forelse($data as $u)
-                    @php
-                        $no = 1;
-                    @endphp
+                      @php
+                      $no = 1;
+                  @endphp
+
+                    @forelse($user as $u)
                         <tr>
                             <td>{{ $no++ }}</td>
                             <td> {{ $u['name'] }}</td>
@@ -108,6 +109,12 @@
                             <td>{{ !empty($u['comment']) ? $u['comment'] : '-' }}</td>
                             <td>
                                 <a href="{{ '/hotspot/user/edit/' }}{{ $u['.id'] }}" class="btn btn-success">Edit</a>
+                                <a href="{{ '/hotspot/user/remove/' }}{{ $u['.id'] }}/{{ $data[0]['name'] }}/{{ $data[0]['.id'] }}" class="btn btn-danger">Hapus</a>
+                                @if($u['disabled'] == 'true')
+                                <a href="{{ '/hotspot/user/enable/' }}{{ $u['.id'] }}/{{ $data[0]['name'] }}/{{ $data[0]['.id'] }}" class="btn btn-info">enable</a>
+                                @else 
+                                <a href="{{ '/hotspot/user/disable/' }}{{ $u['.id'] }}/{{ $data[0]['name'] }}/{{ $data[0]['.id'] }}" class="btn btn-warning">disable</a>
+                                @endif
                                
                             </td>
                         </tr>

@@ -17,7 +17,7 @@ class FilterController extends Controller
             'pass' => env("pass")
         ]);        
 
-        $data = $client->query('/ip/firewall/address-list/getall')->read();
+        $data = $client->query('/ip/firewall/raw/getall')->read();
     //    dd($data);
         // $user = collect($data)->except(['0'])->toArray(); 
         // $aktif = $client->query('/interface/pppoe-client/getall')->read();
@@ -34,7 +34,7 @@ class FilterController extends Controller
             'pass' => env("pass")
         ]);        
 
-        $profile = $client->query('/ip/firewall/address-list/add')->read();
+        $profile = $client->query('/ip/firewall/raw/add')->read();
         // dd($profile);
         return view('filter.addfilter', compact('profile'));
     }
@@ -46,12 +46,18 @@ class FilterController extends Controller
             'user' =>  env("user"),
             'pass' => env("pass")
         ]);        
-
-        $client->query([
-        '/ip/firewall/address-list/add',  
-        '=list='.$request->name,
-        '=address='.$request->target
+// dd($request->dns);
+     $save =    $client->query([
+        '/ip/firewall/raw/add',  
+        '=chain='.'prerouting',
+        '=action='.'drop',
+        '=comment='.$request->comment,
+        '=protocol='.$request->protocol,
+        '=dst-port='.$request->dstport,
+        '=tls-host='.'*.'.$request->dns,
+        '=time='.$request->time
         ])->read();
+        // dd($save);die;
         return redirect('/filter');
     }
 
@@ -63,7 +69,7 @@ class FilterController extends Controller
         ]);        
 
         $query =
-        (new Query('/ip/firewall/address-list/print'))
+        (new Query('/ip/firewall/raw/print'))
             ->where('.id', $id);          
 
             $detail = $client->query($query)->read();
@@ -78,11 +84,23 @@ class FilterController extends Controller
             'user' =>  env("user"),
             'pass' => env("pass")
         ]);        
+        // '=chain='.'prerouting',
+        // '=action='.'drop',
+        // '=comment='.$request->comment,
+        // '=protocol='.$request->protocol,
+        // '=dst-port='.$request->dstport,
+        // '=tls-host='.'*.'.$request->dns,
+        // '=time='.$request->time
 
-                $query = (new Query('/ip/firewall/address-list/set'))
+                $query = (new Query('/ip/firewall/raw/set'))
                 ->equal('.id', $request->id)
-                ->equal('list', $request->name)
-                ->equal('address', $request->target);
+                ->equal('chain', 'chain')
+                ->equal('action', 'drop')
+                ->equal('comment', $request->comment)
+                ->equal('protocol', $request->protocol)
+                ->equal('dst-port', $request->dstport)
+                ->equal('tls-host', $request->dns)
+                ->equal('time', $request->time);
                 $client->query($query)->read();
         return redirect('/filter');
     }
@@ -97,7 +115,7 @@ class FilterController extends Controller
             'pass' => env("pass")
         ]);        
 
-        $client->query(['/ip/firewall/address-list/remove', '=.id='.$id])->read();
+        $client->query(['/ip/firewall/raw/remove', '=.id='.$id])->read();
 
         return redirect('/filter');
     }
@@ -110,7 +128,7 @@ class FilterController extends Controller
             'pass' => env("pass")
         ]);        
 
-        $client->query(['/ip/firewall/address-list/enable', '=.id='.$id])->read();
+        $client->query(['/ip/firewall/raw/enable', '=.id='.$id])->read();
      
         return redirect('/filter');
     }
@@ -129,7 +147,7 @@ class FilterController extends Controller
             'pass' => env("pass")
         ]);        
 
-        $client->query(['/ip/firewall/address-list/disable', '=.id='.$id])->read();
+        $client->query(['/ip/firewall/raw/disable', '=.id='.$id])->read();
      
         return redirect('/filter');
       

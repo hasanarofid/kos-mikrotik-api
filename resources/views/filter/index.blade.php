@@ -41,30 +41,33 @@
                             <thead>
                               <tr>
                                 <th>No</th>
-                                <th>Nama Filter</th>
-                                <th>Address</th>
-                                <th>Tanggal</th>
-                                {{-- <th>Status</th> --}}
+                                <th>Nama </th>
+                                <th>Protokol</th>
+                                <th>Port</th>
+                                <th>DNS</th>
+                                <th>Time</th>
                                 <th>Aksi</th>
                               </tr>
                             </thead> <tbody>
                                 @php
                                     $no=1;   
                                 @endphp
-                            @foreach ($data as $u)
-                            @php
-                                // dd($u); 
+                                @php
+                                // dd($data); 
                             @endphp
+                            @foreach ($data as $u)
+                            
                                 <tr>
                                     <td>{{ $no++}}</td>
-                                    <td>{{ $u['list']}}</td>
-                                    <td>{{ !empty($u['address']) ? $u['address'] : '-' }}</td>
-                                    <td>{{ $u['creation-time']}}</td>
-                                    {{-- <td>{{ ($u['disabled'] == 'true')  ? 'Disable' : 'Enable' }}</td> --}}
+                                    <td>{{ !empty($u['comment']) ? $u['comment'] : '-' }}</td>
+                                    <td>{{ !empty($u['protocol']) ? $u['protocol'] : '-' }}</td>
+                                    <td>{{ !empty($u['dst-port']) ? $u['dst-port'] : '-' }}</td>
+                                    <td>{{ !empty($u['tls-host']) ? $u['tls-host'] : '-' }}</td>
+                                    <td>{{ !empty($u['time']) ? $u['time'] : '-' }}</td>
                                     <td>
                                       <a href="{{ '/filter/edit/' }}{{ $u['.id'] }}" class="btn btn-success">Edit</a>
                                       <a href="{{ '/filter/remove/' }}{{ $u['.id'] }}" class="btn btn-danger">Hapus</a>
-                                      @if($u['disabled'] == 'true')
+                                      @if(!empty($u['disabled']) && $u['disabled'] == 'true')
                                       <a href="{{ '/filter/enable/' }}{{ $u['.id'] }}" class="btn btn-info">enable</a>
                                       @else 
                                       <a href="{{ '/filter/disable/' }}{{ $u['.id'] }}" class="btn btn-warning">disable</a>

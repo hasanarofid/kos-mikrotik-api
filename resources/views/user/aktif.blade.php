@@ -56,16 +56,19 @@
                             </thead>
                             <tbody>
                             @foreach ($aktif as $u)
-                            {{-- {{ dd($u); }} --}}
-                           
+                            @php
+                                // dd($u);
+                            @endphp
                               <tr>
                                 <td>{{ $loop->index + 1 }}</td>
                                 <td> {{ !empty($u['user']) ? $u['user'] : '-' }}</td>
                                 <td> {{ !empty($u['address']) ? $u['address'] : '-'  }}</td>
                                 <td> {{ !empty($u['mac-address']) ? $u['mac-address'] : '-'  }}</td>
-                                <td> {{ !empty($u['bytes-in']) ? $u['bytes-in'] : '-'  }}</td>
-                                <td> {{ !empty($u['bytes-out']) ? $u['bytes-out'] : '-'  }}</td>
                                 <td> {{ !empty($u['uptime']) ? $u['uptime'] : '-' }}</td>
+
+
+                                <td> {{ !empty($u['bytes-out']) ? App\Models\User::formatBytes($u['bytes-out']  , 2) : '-'  }}</td>
+                                <td> {{ !empty($u['bytes-in']) ?App\Models\User::formatBytes($u['bytes-in']  , 2)  : '-'  }}</td>
                                 <td>{{ !empty($u['comment']) ? $u['comment'] : '-' }}</td>
 
                               </tr>
@@ -83,7 +86,8 @@
     </section>
 
 </div>
-    
+
+
 @endsection
 @push('js-page')
 

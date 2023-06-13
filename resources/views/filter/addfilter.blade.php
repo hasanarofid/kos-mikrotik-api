@@ -37,13 +37,28 @@
                     @csrf
                   <div class="card-body">
                     <div class="form-group">
-                      <label for="username">Name Filter</label>
-                      <input type="text" class="form-control" id="name" name="name" placeholder="Masukan name">
+                      <label for="username">Nama</label>
+                      <input type="text" class="form-control" id="comment" name="comment" placeholder="Masukan name">
                     </div>
                   
                     <div class="form-group">
-                      <label for="exampleInputPassword1">Address</label>
-                      <input type="text" class="form-control" id="target" name="target" placeholder="Target">
+                      <label for="exampleInputPassword1">Protocol</label>
+                      <input type="text" class="form-control" id="protocol" name="protocol" placeholder="protocol">
+                    </div>
+
+                    <div class="form-group">
+                      <label for="exampleInputPassword1">Port</label>
+                      <input type="text" class="form-control" id="dstport" name="dstport" placeholder="Port">
+                    </div>
+
+                    <div class="form-group">
+                      <label for="exampleInputPassword1">DNS</label>
+                      <input type="text" class="form-control" id="dns" name="dns" placeholder="DNS">
+                    </div>
+
+                    <div class="form-group">
+                      <label for="exampleInputPassword1">Time</label>
+                      <input type="text" class="form-control" id="time" name="time" placeholder="Time">
                     </div>
                     
                   </div>
