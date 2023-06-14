@@ -137,10 +137,6 @@ $user = $client->query($query)->read();
             <label for="username">Limit</label>
             <input type="text" class="form-control" name="rate" class="from-control" id="rate-limit" placeholder="inputkan voucher" required>
           </div>
-          <div class="form-group">
-            <label for="username">User</label>
-            <input type="text" class="form-control" name="user" class="from-control" id="user23" placeholder="inputkan voucher" required>
-          </div>
       
         </div>
 
